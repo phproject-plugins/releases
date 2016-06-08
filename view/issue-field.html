@@ -1,0 +1,16 @@
+<div class="form-group">
+	<label class="col-md-2 control-label label-sm">Release</label>
+	<div class="col-md-6">
+		<select name="release_id" class="form-control input-sm">
+			<option value="0" {{ !@release.id ? 'selected' : '' }}>No release</option>
+			<repeat group="{{ @releases }}" value="{{ @item }}">
+				<option value="{{ @item.id }}" style="{{ @item.closed_date ? 'text-decoration: line-through;' : ''; }}" {{ @release.id == @item.id ? 'selected' : '' }}>
+					#{{ @item.id }}: {{ @item.name | esc }}
+					<check if="{{ @item->target_date }}">
+						&mdash; {{ date("F j, Y", strtotime(@item->target_date)) }}
+					</check>
+				</option>
+			</repeat>
+		</select>
+	</div>
+</div>

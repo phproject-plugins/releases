@@ -1,0 +1,46 @@
+<div class="list-group-item release">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3><a href="{{ @BASE }}/releases/{{ @release.id }}">{{ @release.name | esc }}</a></h3>
+			<check if="{{ @release.target_date }}">
+				<true>
+					<p>Target release date: {{ date("F j, Y", strtotime(@release.target_date)) }}</p>
+				</true>
+				<false>
+					<p class="text-muted">No target release date</p>
+				</false>
+			</check>
+			<p><small>{{ @release.description | esc }}</small></p>
+		</div>
+		<div class="col-sm-6">
+			<set percent="{{ @release.issue_count ? round(@release.closed_count / @release.issue_count * 100, 2) : 0 }}" />
+
+			<div class="progress">
+				<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ round(@percent) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ @percent }}%;">
+					<span class="sr-only">{{ @dict.n_complete,@percent.'%' | format }}</span>
+				</div>
+			</div>
+			<ul class="list-inline">
+				<li>{{ @dict.n_complete,@percent.'%' | format }}</li>
+				<li>{{ @release.issue_count - @release.closed_count }} {{ @dict.open }}</li>
+				<li>{{ @release.closed_count }} {{ @dict.closed }}</li>
+				<check if="{{ @release.closed_date }}">
+					<li class="text-muted">Closed {{ date("F j, Y", strtotime(@release.closed_date)) }}</li>
+				</check>
+			</ul>
+
+			<ul class="list-inline">
+				<li><a href="{{ @BASE }}/releases/{{ @release.id }}/edit">{{ @dict.edit }}</a></li>
+				<check if="{{ @release.closed_date }}">
+					<true>
+						<li><a href="{{ @BASE }}/releases/{{ @release.id }}/reopen">{{ @dict.reopen }}</a></li>
+					</true>
+					<false>
+						<li><a href="{{ @BASE }}/releases/{{ @release.id }}/close">{{ @dict.close }}</a></li>
+					</false>
+				</check>
+				<li><a href="{{ @BASE }}/releases/{{ @release.id }}/delete" class="text-danger" onclick="return confirm('Are you sure you want to delete this release?');">{{ @dict.delete }}</a></li>
+			</ul>
+		</div>
+	</div>
+</div>

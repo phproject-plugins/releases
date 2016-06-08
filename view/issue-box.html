@@ -1,0 +1,11 @@
+<check if="{{ @release->id }}">
+	<dl>
+		<dt>Release:</dt>
+		<dd>
+			<a href="{{ @BASE }}/releases/{{ @release.id }}">{{ @release->name | esc }}</a>
+			<check if="{{ @release->target_date }}">
+				<br>Target release date: {{ date("F j, Y", strtotime(@release->target_date)) }}
+			</check>
+		</dd>
+	</dl>
+</check>
