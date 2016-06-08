@@ -27,8 +27,18 @@
 		<check if="{{ @release.target_date }}">
 			<p>Target release date: {{ date("F j, Y", strtotime(@release.target_date)) }}</p>
 		</check>
+
 		<include href="blocks/issue-list.html" />
+
 		<include href="blocks/footer.html" />
+		<script src="{{ @BASE }}/minify/js/stupidtable.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$('.issue-list thead').find('th:nth-child(1), th:nth-child(6)').attr('data-sort', 'int');
+			$('.issue-list thead').find('th:not([data-sort])').attr('data-sort', 'string');
+			$('.issue-list').stupidtable();
+		});
+		</script>
 	</div>
 </body>
 </html>

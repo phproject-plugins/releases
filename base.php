@@ -34,9 +34,7 @@ class Base extends \Plugin {
 		$this->_addNav("releases", "Releases", "/^\\/releases/", "browse");
 
         // Render release field and box on issue pages
-        if($f3->get("user.rank") >= \Model\User::RANK_ADMIN) {
-	        $this->_hook("render.issue_edit.after_fields", array($this, "issueField"));
-        }
+        $this->_hook("render.issue_edit.after_fields", array($this, "issueField"));
         $this->_hook("render.issue_single.before_description", array($this, "issueBox"));
 
         // Handle issue saving
@@ -73,8 +71,10 @@ class Base extends \Plugin {
 		$release = new Model\Release;
 		$release->loadByIssueId($issue->id);
 		\Base::instance()->set("release", $release);
-		\Base::instance()->set("releases", $release->find());
-		echo \Template::instance()->render("releases/view/issue-field.html");
+        if($f3->get("user.rank") >= \Model\User::RANK_ADMIN) {
+			\Base::instance()->set("releases", $release->find());
+			echo \Template::instance()->render("releases/view/issue-field.html");
+		}
 	}
 
 	/**
