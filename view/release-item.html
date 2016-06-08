@@ -29,18 +29,20 @@
 				</check>
 			</ul>
 
-			<ul class="list-inline">
-				<li><a href="{{ @BASE }}/releases/{{ @release.id }}/edit">{{ @dict.edit }}</a></li>
-				<check if="{{ @release.closed_date }}">
-					<true>
-						<li><a href="{{ @BASE }}/releases/{{ @release.id }}/reopen">{{ @dict.reopen }}</a></li>
-					</true>
-					<false>
-						<li><a href="{{ @BASE }}/releases/{{ @release.id }}/close">{{ @dict.close }}</a></li>
-					</false>
-				</check>
-				<li><a href="{{ @BASE }}/releases/{{ @release.id }}/delete" class="text-danger" onclick="return confirm('Are you sure you want to delete this release?');">{{ @dict.delete }}</a></li>
-			</ul>
+			<check if="{{ @user.rank >= \Model\User::RANK_ADMIN }}">
+				<ul class="list-inline">
+					<li><a href="{{ @BASE }}/releases/{{ @release.id }}/edit">{{ @dict.edit }}</a></li>
+					<check if="{{ @release.closed_date }}">
+						<true>
+							<li><a href="{{ @BASE }}/releases/{{ @release.id }}/reopen">{{ @dict.reopen }}</a></li>
+						</true>
+						<false>
+							<li><a href="{{ @BASE }}/releases/{{ @release.id }}/close">{{ @dict.close }}</a></li>
+						</false>
+					</check>
+					<li><a href="{{ @BASE }}/releases/{{ @release.id }}/delete" class="text-danger" onclick="return confirm('Are you sure you want to delete this release?');">{{ @dict.delete }}</a></li>
+				</ul>
+			</check>
 		</div>
 	</div>
 </div>

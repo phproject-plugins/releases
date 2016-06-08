@@ -21,7 +21,7 @@ class Controller extends \Controller {
 	}
 
 	public function single(\Base $f3, array $params) {
-		$this->_requireAdmin();
+		$this->_requireLogin();
 		$release = new Model\Release;
 		$release->load($params["id"]);
 		if(!$release->id) {
@@ -96,10 +96,6 @@ class Controller extends \Controller {
 		}
 		$release->save();
 		$f3->reroute("/releases");
-	}
-
-	public function tie(\Base $f3) {
-		// TODO: tie issue to release
 	}
 
 }
