@@ -9,7 +9,7 @@ class Controller extends \Controller {
 		// TODO: Load releases
 		$release = new Model\Release_Detail;
 		$open = $release->find("closed_date IS NULL");
-		$closed = $release->find("closed_date IS NOT NULL");
+		$closed = $release->find("closed_date IS NOT NULL", array("order" => "created_date DESC"));
 		$f3->set("open", $open);
 		$f3->set("closed", $closed);
 		$this->_render("releases/view/index.html");
