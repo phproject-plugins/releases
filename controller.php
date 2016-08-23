@@ -34,6 +34,56 @@ class Controller extends \Controller {
 		$this->_render("releases/view/single.html");
 	}
 
+	public function export(\Base $f3, array $params) {
+		$this->_requireLogin();
+
+		$release = new Model\Release;
+		$release->load($params["id"]);
+		if(!$release->id) {
+			$f3->error(404);
+		}
+
+		$issue = new Model\Release_Issue_Detail;
+		$issues = $issue->find(array("release_id = ?", $release->id));
+
+		// Configure visible fields
+		$fields = array(
+			"id" => $f3->get("dict.cols.id"),
+			"name" => $f3->get("dict.cols.title"),
+			"type_name" => $f3->get("dict.cols.type"),
+			"priority_name" => $f3->get("dict.cols.priority"),
+			"status_name" => $f3->get("dict.cols.status"),
+			"author_name" => $f3->get("dict.cols.author"),
+			"owner_name" => $f3->get("dict.cols.assignee"),
+			"sprint_name" => $f3->get("dict.cols.sprint"),
+			"created_date" => $f3->get("dict.cols.created"),
+			"due_date" => $f3->get("dict.cols.due_date"),
+		);
+
+		// Notify browser that file is a CSV, send as attachment (force download)
+		header("Content-type: text/csv");
+		header("Content-Disposition: attachment; filename=release_" . \Web::instance()->slug($release->name) . ".csv");
+		header("Pragma: no-cache");
+ 		header("Expires: 0");
+
+		// Output data directly
+		$fh = fopen("php://output", "w");
+
+		// Add column headings
+		fwrite($fh, '"' . implode('","', array_values($fields)) . "\"\n");
+
+		// Add rows
+		foreach($issues as $row) {
+			$cols = array();
+			foreach(array_keys($fields) as $field) {
+				$cols[] = $row->get($field);
+			}
+			fputcsv($fh, $cols);
+		}
+
+		fclose($fh);
+	}
+
 	public function edit(\Base $f3, array $params) {
 		$this->_requireAdmin();
 		$release = new Model\Release;

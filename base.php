@@ -22,6 +22,7 @@ class Base extends \Plugin {
         $f3->route("GET /releases/new", "Plugin\Releases\Controller->new");
         $f3->route("GET /releases/new", "Plugin\Releases\Controller->add");
         $f3->route("GET /releases/@id", "Plugin\Releases\Controller->single");
+        $f3->route("GET /releases/@id/export", "Plugin\Releases\Controller->export");
         $f3->route("GET /releases/@id/edit", "Plugin\Releases\Controller->edit");
         $f3->route("GET /releases/@id/close", "Plugin\Releases\Controller->close");
         $f3->route("GET /releases/@id/reopen", "Plugin\Releases\Controller->reopen");
