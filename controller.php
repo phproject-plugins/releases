@@ -8,8 +8,8 @@ class Controller extends \Controller {
 		$this->_requireLogin();
 		// TODO: Load releases
 		$release = new Model\Release_Detail;
-		$open = $release->find("closed_date IS NULL");
-		$closed = $release->find("closed_date IS NOT NULL", array("order" => "created_date DESC"));
+		$open = $release->find("closed_date IS NULL", array("order" => "target_date ASC, created_date ASC"));
+		$closed = $release->find("closed_date IS NOT NULL", array("order" => "target_date DESC, created_date DESC"));
 		$f3->set("open", $open);
 		$f3->set("closed", $closed);
 		$this->_render("releases/view/index.html");
