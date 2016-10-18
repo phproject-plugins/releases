@@ -64,7 +64,7 @@ class Controller extends \Controller {
 		header("Content-type: text/csv");
 		header("Content-Disposition: attachment; filename=release_" . \Web::instance()->slug($release->name) . ".csv");
 		header("Pragma: no-cache");
- 		header("Expires: 0");
+		header("Expires: 0");
 
 		// Output data directly
 		$fh = fopen("php://output", "w");

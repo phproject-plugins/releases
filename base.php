@@ -2,7 +2,7 @@
 /**
  * @package  Releases
  * @author   Alan Hardman <alan@phpizza.com>
- * @version  0.0.1
+ * @version  0.1.0
  * @requires 1.4.1
  */
 
@@ -18,28 +18,28 @@ class Base extends \Plugin {
 		$f3 = \Base::instance();
 
 		// Set up routes
-        $f3->route("GET /releases", "Plugin\Releases\Controller->index");
-        $f3->route("GET /releases/new", "Plugin\Releases\Controller->new");
-        $f3->route("GET /releases/new", "Plugin\Releases\Controller->add");
-        $f3->route("GET /releases/@id", "Plugin\Releases\Controller->single");
-        $f3->route("GET /releases/@id/export", "Plugin\Releases\Controller->export");
-        $f3->route("GET /releases/@id/edit", "Plugin\Releases\Controller->edit");
-        $f3->route("GET /releases/@id/close", "Plugin\Releases\Controller->close");
-        $f3->route("GET /releases/@id/reopen", "Plugin\Releases\Controller->reopen");
-        $f3->route("GET /releases/@id/delete", "Plugin\Releases\Controller->delete");
-        $f3->route("POST /releases/new", "Plugin\Releases\Controller->addPost");
-        $f3->route("POST /releases/@id/edit", "Plugin\Releases\Controller->editPost");
-        $f3->route("POST /releases/tie", "Plugin\Releases\Controller->tie");
+		$f3->route("GET /releases", "Plugin\Releases\Controller->index");
+		$f3->route("GET /releases/new", "Plugin\Releases\Controller->new");
+		$f3->route("GET /releases/new", "Plugin\Releases\Controller->add");
+		$f3->route("GET /releases/@id", "Plugin\Releases\Controller->single");
+		$f3->route("GET /releases/@id/export", "Plugin\Releases\Controller->export");
+		$f3->route("GET /releases/@id/edit", "Plugin\Releases\Controller->edit");
+		$f3->route("GET /releases/@id/close", "Plugin\Releases\Controller->close");
+		$f3->route("GET /releases/@id/reopen", "Plugin\Releases\Controller->reopen");
+		$f3->route("GET /releases/@id/delete", "Plugin\Releases\Controller->delete");
+		$f3->route("POST /releases/new", "Plugin\Releases\Controller->addPost");
+		$f3->route("POST /releases/@id/edit", "Plugin\Releases\Controller->editPost");
+		$f3->route("POST /releases/tie", "Plugin\Releases\Controller->tie");
 
 		// Add navigation
 		$this->_addNav("releases", "Releases", "/^\\/releases/", "browse");
 
-        // Render release field and box on issue pages
-        $this->_hook("render.issue_edit.after_fields", array($this, "issueField"));
-        $this->_hook("render.issue_single.before_description", array($this, "issueBox"));
+		// Render release field and box on issue pages
+		$this->_hook("render.issue_edit.after_fields", array($this, "issueField"));
+		$this->_hook("render.issue_single.before_description", array($this, "issueBox"));
 
-        // Handle issue saving
-        $this->_hook("model/issue.before_save", array($this, "issueSave"));
+		// Handle issue saving
+		$this->_hook("model/issue.before_save", array($this, "issueSave"));
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Base extends \Plugin {
 		$release = new Model\Release;
 		$release->loadByIssueId($issue->id);
 		\Base::instance()->set("release", $release);
-        if($f3->get("user.rank") >= \Model\User::RANK_ADMIN) {
+		if($f3->get("user.rank") >= \Model\User::RANK_MANAGER) {
 			\Base::instance()->set("releases", $release->find());
 			echo \Template::instance()->render("releases/view/issue-field.html");
 		}
