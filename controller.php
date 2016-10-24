@@ -16,7 +16,7 @@ class Controller extends \Controller {
 	}
 
 	public function add(\Base $f3) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$this->_render("releases/view/new.html");
 	}
 
@@ -85,7 +85,7 @@ class Controller extends \Controller {
 	}
 
 	public function edit(\Base $f3, array $params) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$release = new Model\Release;
 		$release->load($params["id"]);
 		if(!$release->id) {
@@ -96,7 +96,7 @@ class Controller extends \Controller {
 	}
 
 	public function close(\Base $f3, array $params) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$release = new Model\Release;
 		$release->load($params["id"]);
 		$release->closed_date = date("Y-m-d H:i:s");
@@ -105,7 +105,7 @@ class Controller extends \Controller {
 	}
 
 	public function reopen(\Base $f3, array $params) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$release = new Model\Release;
 		$release->load($params["id"]);
 		$release->closed_date = null;
@@ -114,7 +114,7 @@ class Controller extends \Controller {
 	}
 
 	public function delete(\Base $f3, array $params) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$release = new Model\Release;
 		$release->load($params["id"]);
 		$release->delete();
@@ -122,7 +122,7 @@ class Controller extends \Controller {
 	}
 
 	public function addPost(\Base $f3) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$release = new Model\Release;
 		$release->name = $f3->get("POST.name");
 		$release->description = $f3->get("POST.description");
@@ -134,7 +134,7 @@ class Controller extends \Controller {
 	}
 
 	public function editPost(\Base $f3, array $params) {
-		$this->_requireAdmin();
+		$this->_requireLogin(\Model\User::RANK_MANAGER);
 		$release = new Model\Release;
 		$release->load($params["id"]);
 		$release->name = $f3->get("POST.name");
