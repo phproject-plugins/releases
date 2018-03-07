@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="{{ @LANGUAGE }}">
 <head>
-	<include href="blocks/head.html" />
+    <include href="blocks/head.html" />
 </head>
 <body>
-	<include href="blocks/navbar.html" />
-	<div class="container-fluid">
-		<a href="{{ @BASE }}/releases">
-			<span class="fa fa-chevron-left"></span>&ensp;Releases
-		</a>
-		<div class="row">
-			<div class="col-sm-8">
-				<h1>{{ @release.name | esc }}</h1>
-			</div>
-			<div class="col-sm-4 text-right" style="padding-top: 10px;">
-				<a class="btn btn-link" href="{{ @BASE }}/releases/{{ @release.id }}/export">{{ @dict.export }}</a>
-				<check if="{{ @release.closed_date }}">
-					<true>
-						<a class="btn btn-default" href="{{ @BASE }}/releases/{{ @release.id }}/reopen">{{ @dict.reopen }}</a>
-					</true>
-					<false>
-						<a class="btn btn-default" href="{{ @BASE }}/releases/{{ @release.id }}/close">{{ @dict.close }}</a>
-					</false>
-				</check>
-			</div>
-		</div>
-		<check if="{{ @release.target_date }}">
-			<p>Target release date: {{ date("F j, Y", strtotime(@release.target_date)) }}</p>
-		</check>
+    <include href="blocks/navbar.html" />
+    <div class="container-fluid">
+        <a href="{{ @BASE }}/releases">
+            <span class="fa fa-chevron-left"></span>&ensp;Releases
+        </a>
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>{{ @release.name | esc }}</h1>
+            </div>
+            <div class="col-sm-4 text-right" style="padding-top: 10px;">
+                <a class="btn btn-link" href="{{ @BASE }}/releases/{{ @release.id }}/export">{{ @dict.export }}</a>
+                <check if="{{ @release.closed_date }}">
+                    <true>
+                        <a class="btn btn-default" href="{{ @BASE }}/releases/{{ @release.id }}/reopen">{{ @dict.reopen }}</a>
+                    </true>
+                    <false>
+                        <a class="btn btn-default" href="{{ @BASE }}/releases/{{ @release.id }}/close">{{ @dict.close }}</a>
+                    </false>
+                </check>
+            </div>
+        </div>
+        <check if="{{ @release.target_date }}">
+            <p>Target release date: {{ date("F j, Y", strtotime(@release.target_date)) }}</p>
+        </check>
 
-		<include href="blocks/issue-list.html" />
+        <include href="blocks/issue-list.html" />
 
-		<include href="blocks/footer.html" />
-		<script src="{{ @BASE }}/minify/js/stupidtable.min.js"></script>
-		<script type="text/javascript">
-		$(document).ready(function() {
-			$('.issue-list thead').find('th:nth-child(1), th:nth-child(6)').attr('data-sort', 'int');
-			$('.issue-list thead').find('th:not([data-sort])').attr('data-sort', 'string');
-			$('.issue-list').stupidtable();
-		});
-		</script>
-	</div>
+        <include href="blocks/footer.html" />
+        <script src="{{ @BASE }}/minify/js/stupidtable.min.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('.issue-list thead').find('th:nth-child(1), th:nth-child(6)').attr('data-sort', 'int');
+            $('.issue-list thead').find('th:not([data-sort])').attr('data-sort', 'string');
+            $('.issue-list').stupidtable();
+        });
+        </script>
+    </div>
 </body>
 </html>

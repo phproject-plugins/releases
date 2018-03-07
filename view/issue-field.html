@@ -1,32 +1,32 @@
 <div class="form-group">
-	<label class="col-md-2 control-label label-sm">Release</label>
-	<div class="col-md-6">
-		<select name="release_id" class="form-control input-sm">
-			<option value="0" {{ !@release.id ? 'selected' : '' }}>No release</option>
-			<optgroup label="{{ @dict.open }}">
-				<repeat group="{{ @releases }}" value="{{ @item }}">
-					<check if="{{ !@item.closed_date }}">
-						<option value="{{ @item.id }}" {{ @release.id == @item.id ? 'selected' : '' }}>
-							#{{ @item.id }}: {{ @item.name | esc }}
-							<check if="{{ @item->target_date }}">
-								&mdash; {{ date("F j, Y", strtotime(@item->target_date)) }}
-							</check>
-						</option>
-					</check>
-				</repeat>
-			</optgroup>
-			<optgroup label="{{ @dict.closed }}">
-				<repeat group="{{ array_reverse(@releases) }}" value="{{ @item }}">
-					<check if="{{ @item.closed_date }}">
-						<option value="{{ @item.id }}" {{ @release.id == @item.id ? 'selected' : '' }}>
-							#{{ @item.id }}: {{ @item.name | esc }}
-							<check if="{{ @item->target_date }}">
-								&mdash; {{ date("F j, Y", strtotime(@item->target_date)) }}
-							</check>
-						</option>
-					</check>
-				</repeat>
-			</optgroup>
-		</select>
-	</div>
+    <label class="col-md-2 control-label label-sm">Release</label>
+    <div class="col-md-6">
+        <select name="release_id" class="form-control input-sm">
+            <option value="0" {{ !@release.id ? 'selected' : '' }}>No release</option>
+            <optgroup label="{{ @dict.open }}">
+                <repeat group="{{ @releases }}" value="{{ @item }}">
+                    <check if="{{ !@item.closed_date }}">
+                        <option value="{{ @item.id }}" {{ @release.id == @item.id ? 'selected' : '' }}>
+                            #{{ @item.id }}: {{ @item.name | esc }}
+                            <check if="{{ @item->target_date }}">
+                                &mdash; {{ date("F j, Y", strtotime(@item->target_date)) }}
+                            </check>
+                        </option>
+                    </check>
+                </repeat>
+            </optgroup>
+            <optgroup label="{{ @dict.closed }}">
+                <repeat group="{{ array_reverse(@releases) }}" value="{{ @item }}">
+                    <check if="{{ @item.closed_date }}">
+                        <option value="{{ @item.id }}" {{ @release.id == @item.id ? 'selected' : '' }}>
+                            #{{ @item.id }}: {{ @item.name | esc }}
+                            <check if="{{ @item->target_date }}">
+                                &mdash; {{ date("F j, Y", strtotime(@item->target_date)) }}
+                            </check>
+                        </option>
+                    </check>
+                </repeat>
+            </optgroup>
+        </select>
+    </div>
 </div>

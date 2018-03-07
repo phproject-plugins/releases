@@ -1,71 +1,71 @@
 <!DOCTYPE html>
 <html lang="{{ @LANGUAGE }}">
 <head>
-	<include href="blocks/head.html" />
-	<style type="text/css">
-		.release h3 {
-			margin-top: 10px;
-		}
-		.release .progress {
-			margin-top: 15px;
-		}
-	</style>
+    <include href="blocks/head.html" />
+    <style type="text/css">
+        .release h3 {
+            margin-top: 10px;
+        }
+        .release .progress {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-	<include href="blocks/navbar.html" />
-	<div class="container">
-		<div class="clearfix">
-			<div class="pull-left">
-				<h2>Releases</h2>
-			</div>
-			<div class="pull-right">
-				<a class="btn btn-primary" href="{{ @BASE }}/releases/new" style="margin-top: 17px;">New release</a>
-			</div>
-		</div>
-		<br>
+    <include href="blocks/navbar.html" />
+    <div class="container">
+        <div class="clearfix">
+            <div class="pull-left">
+                <h2>Releases</h2>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-primary" href="{{ @BASE }}/releases/new" style="margin-top: 17px;">New release</a>
+            </div>
+        </div>
+        <br>
 
-		<ul class="nav nav-pills" role="tablist">
-			<li role="presentation" class="active"><a href="#tab-open" aria-controls="tab-open" role="tab" data-toggle="tab">{{ @dict.open }}</a></li>
-			<li role="presentation"><a href="#tab-closed" aria-controls="tab-closed" role="tab" data-toggle="tab">{{ @dict.closed }}</a></li>
-		</ul>
-		<br>
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation" class="active"><a href="#tab-open" aria-controls="tab-open" role="tab" data-toggle="tab">{{ @dict.open }}</a></li>
+            <li role="presentation"><a href="#tab-closed" aria-controls="tab-closed" role="tab" data-toggle="tab">{{ @dict.closed }}</a></li>
+        </ul>
+        <br>
 
-		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="tab-open">
-				<check if="{{ @open }}">
-					<true>
-						<div class="list-group">
-							<repeat group="{{ @open }}" value="{{ @release }}">
-								<include href="releases/view/release-item.html" />
-							</repeat>
-						</div>
-					</true>
-					<false>
-						<div class="jumbotron text-center">
-							<p style="margin: 0;">No open releases</p>
-						</div>
-					</false>
-				</check>
-			</div>
-			<div role="tabpanel" class="tab-pane" id="tab-closed">
-				<check if="{{ @closed }}">
-					<true>
-						<div class="list-group">
-							<repeat group="{{ @closed }}" value="{{ @release }}">
-								<include href="releases/view/release-item.html" />
-							</repeat>
-						</div>
-					</true>
-					<false>
-						<div class="jumbotron text-center">
-							<p style="margin: 0;">No closed releases</p>
-						</div>
-					</false>
-				</check>
-			</div>
-		</div>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tab-open">
+                <check if="{{ @open }}">
+                    <true>
+                        <div class="list-group">
+                            <repeat group="{{ @open }}" value="{{ @release }}">
+                                <include href="releases/view/release-item.html" />
+                            </repeat>
+                        </div>
+                    </true>
+                    <false>
+                        <div class="jumbotron text-center">
+                            <p style="margin: 0;">No open releases</p>
+                        </div>
+                    </false>
+                </check>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tab-closed">
+                <check if="{{ @closed }}">
+                    <true>
+                        <div class="list-group">
+                            <repeat group="{{ @closed }}" value="{{ @release }}">
+                                <include href="releases/view/release-item.html" />
+                            </repeat>
+                        </div>
+                    </true>
+                    <false>
+                        <div class="jumbotron text-center">
+                            <p style="margin: 0;">No closed releases</p>
+                        </div>
+                    </false>
+                </check>
+            </div>
+        </div>
 
-		<include href="blocks/footer.html" />
-	</div>
+        <include href="blocks/footer.html" />
+    </div>
 </body>
 </html>
