@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="{{ @LANGUAGE }}">
+<head>
+    <include href="blocks/head.html" />
+    <style>
+        .plan-topbar {
+            margin-top: -20px;
+            padding-left: 25px;
+            padding-right: 25px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            background-color: rgba(127, 127, 127, 0.05);
+        }
+        .plan-topbar h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .plan-board {
+            table-layout: fixed;
+            margin-bottom: 1rem;
+        }
+        .plan-board th,
+        .plan-board td {
+            width: 240px;
+        }
+        .plan-board a.nolink {
+            text-decoration: none;
+        }
+        .plan-board a.nolink:hover,
+        .plan-board a.nolink:focus {
+            text-decoration: underline;
+        }
+        .plan-board th small {
+            opacity: 0.8;
+            font-weight: normal;
+        }
+        .plan-release {
+            height: 160px;
+        }
+    </style>
+</head>
+<body>
+    <include href="blocks/navbar.html" />
+
+    <div class="plan-topbar">
+        <h3>
+            <a href="{{ @BASE }}/issues/{{ @issue.id }}" class="nolink">{{ @issue.name | esc }}</a>
+            <small>#{{ @issue.id }}</small>
+        </h3>
+        {{ @issue.owner_name }}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered plan-board">
+            <thead>
+                <tr>
+                    <td></td>
+                    <repeat group="{{ @issue->getChildren() }}" value="{{ @epic }}">
+                        <th data-id="{{ @epic.id }}">
+                            <a href="{{ @BASE }}/issues/{{ @epic.id }}" class="nolink">{{ @epic.name }}</a><br>
+                            <span class="text-muted">{{ @epic.id }}</span>
+                        </th>
+                    </repeat>
+                </tr>
+            </thead>
+            <tbody>
+                <repeat group="{{ @releases }}" value="{{ @release }}">
+                    <tr>
+                        <th class="plan-release">
+                            <a href="{{ @BASE }}/releases/{{ @release.id }}" class="nolink">Release #{{ @release.id }}</a><br>
+                            {{ @release.name | esc }}<br>
+                            <small>{{ @release.description | esc }}</small>
+                        </th>
+                        <repeat group="{{ @issue->getChildren() }}" value="{{ @epic }}">
+                            <td>
+                                <!-- TODO: show stories for this epic/release combination -->
+                            </td>
+                        </repeat>
+                    </tr>
+                </repeat>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container-fluid">
+        <include href="blocks/footer.html" />
+    </div>
+</body>
+</html>
