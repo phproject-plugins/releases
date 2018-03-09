@@ -50,6 +50,30 @@
             text-align: center;
         }
     </style>
+    <style media="print">
+        @page {
+            size: landscape;
+        }
+        body {
+            padding-top: 0;
+            font-size: 9pt;
+        }
+        a[href]:after {
+            content: '';
+        }
+        .navbar-fixed-top {
+            display: none;
+        }
+        .plan-topbar {
+            margin-top: 0;
+        }
+        .plan-board {
+            margin-bottom: 0;
+        }
+        .container-fluid > footer {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <include href="blocks/navbar.html" />

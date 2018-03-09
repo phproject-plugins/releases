@@ -64,18 +64,20 @@ class Projectcontroller extends \Controller
         $f3->set('board', $board);
 
         // Load stories
-        $storyType = $f3->get('site.plugins.releases.type.story');
-        $stories = $issue->find([
-            "type_id = ? AND parent_id IN ($storyParentStr)",
-            $storyType,
-        ]);
         $storyMap = [];
         $storyIds = [];
-        foreach ($stories as $story) {
-            $storyMap[$story->parent_id][] = $story->cast();
-            $storyIds[] = $story->id;
+        if ($featureIds || $epicIds) {
+            $storyType = $f3->get('site.plugins.releases.type.story');
+            $stories = $issue->find([
+                "type_id = ? AND parent_id IN ($storyParentStr)",
+                $storyType,
+            ]);
+            foreach ($stories as $story) {
+                $storyMap[$story->parent_id][] = $story->cast();
+                $storyIds[] = $story->id;
+            }
+            $storyIdStr = implode(',', $storyIds);
         }
-        $storyIdStr = implode(',', $storyIds);
         $f3->set('storyMap', $storyMap);
 
         // Build release-story map
