@@ -31,7 +31,14 @@ class Base extends \Plugin
         $f3->route("POST /releases/@id/edit", "Plugin\Releases\Controller->editPost");
         $f3->route("POST /releases/tie", "Plugin\Releases\Controller->tie");
 
-        // Set up project planner routes
+        // Initialize product overview config
+        if (!$f3->get('site.plugins.releases.type.feature')) {
+            \Model\Config::setVal('site.plugins.releases.type.feature', 1);
+            \Model\Config::setVal('site.plugins.releases.type.epic', 2);
+            \Model\Config::setVal('site.plugins.releases.type.story', 3);
+        }
+
+        // Set up product overview routes
         $f3->route("GET /releases/plan/@id", "Plugin\Releases\Projectcontroller->projectPlan");
 
         // Add navigation

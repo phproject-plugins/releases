@@ -20,8 +20,7 @@
             table-layout: fixed;
             margin-bottom: 1rem;
         }
-        .plan-board th,
-        .plan-board td {
+        .plan-board .epic {
             width: 240px;
         }
         .plan-board a.nolink {
@@ -38,6 +37,18 @@
         .plan-release {
             height: 160px;
         }
+
+        .plan-board td::after {
+            content: '';
+            clear: both;
+        }
+        .plan-story {
+            float: left;
+            width: calc(50% - 15px);
+            margin-right: 15px;
+            min-width: 160px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +56,7 @@
 
     <div class="plan-topbar">
         <h3>
-            <a href="{{ @BASE }}/issues/{{ @issue.id }}" class="nolink">{{ @issue.name | esc }}</a>
+            <a href="{{ @BASE }}/issues/{{ @issue.id }}" target="_blank" class="nolink">{{ @issue.name | esc }}</a>
             <small>#{{ @issue.id }}</small>
         </h3>
         {{ @issue.owner_name }}
@@ -55,11 +66,26 @@
         <table class="table table-bordered plan-board">
             <thead>
                 <tr>
-                    <td></td>
-                    <repeat group="{{ @issue->getChildren() }}" value="{{ @epic }}">
-                        <th data-id="{{ @epic.id }}">
-                            <a href="{{ @BASE }}/issues/{{ @epic.id }}" class="nolink">{{ @epic.name }}</a><br>
-                            <span class="text-muted">{{ @epic.id }}</span>
+                    <td rowspan="2"></td>
+                    <repeat group="{{ @board }}" value="{{ @feature }}">
+                        <th data-id="{{ @feature.id }}" colspan="{{ @feature.epics ? count(@feature.epics) + 1 : 1 }}">
+                            <a href="{{ @BASE }}/issues/{{ @feature.id }}" target="_blank" class="nolink">{{ @feature.name }}</a><br>
+                            <span class="text-muted">{{ @feature.id }}</span>
+                        </th>
+                    </repeat>
+                </tr>
+                <tr>
+                    <repeat group="{{ @board }}" value="{{ @feature }}">
+                        <check if="{{ isset(@feature.epics) }}">
+                            <repeat group="{{ @feature.epics }}" value="{{ @epic }}">
+                                <th data-id="{{ @epic.id }}" class="epic">
+                                    <a href="{{ @BASE }}/issues/{{ @epic.id }}" target="_blank" class="nolink">{{ @epic.name }}</a><br>
+                                    <span class="text-muted">{{ @epic.id }}</span>
+                                </th>
+                            </repeat>
+                        </check>
+                        <th class="epic">
+                            No Epic
                         </th>
                     </repeat>
                 </tr>
@@ -68,17 +94,65 @@
                 <repeat group="{{ @releases }}" value="{{ @release }}">
                     <tr>
                         <th class="plan-release">
-                            <a href="{{ @BASE }}/releases/{{ @release.id }}" class="nolink">Release #{{ @release.id }}</a><br>
+                            <a href="{{ @BASE }}/releases/{{ @release.id }}" target="_blank" class="nolink">Release #{{ @release.id }}</a><br>
                             {{ @release.name | esc }}<br>
                             <small>{{ @release.description | esc }}</small>
                         </th>
-                        <repeat group="{{ @issue->getChildren() }}" value="{{ @epic }}">
+                        <repeat group="{{ @board }}" value="{{ @feature }}">
+                            <check if="{{ isset(@feature.epics) }}">
+                                <repeat group="{{ @feature.epics }}" value="{{ @epic }}">
+                                    <td>
+                                        <check if="{{ array_key_exists(@epic.id, @storyMap) }}">
+                                            <repeat group="{{ @storyMap[@epic.id] }}" value="{{ @story }}">
+                                                <check if="{{ array_key_exists(@release.id, @releaseMap) && in_array(@story.id, @releaseMap[@release.id]) }}">
+                                                    <include href="releases/view/project-plan-story-card.html" />
+                                                </check>
+                                            </repeat>
+                                        </check>
+                                    </td>
+                                </repeat>
+                            </check>
                             <td>
-                                <!-- TODO: show stories for this epic/release combination -->
+                                <check if="{{ array_key_exists(@feature.id, @storyMap) }}">
+                                    <repeat group="{{ @storyMap[@feature.id] }}" value="{{ @story }}">
+                                        <check if="{{ array_key_exists(@release.id, @releaseMap) && in_array(@story.id, @releaseMap[@release.id]) }}">
+                                            <include href="releases/view/project-plan-story-card.html" />
+                                        </check>
+                                    </repeat>
+                                </check>
                             </td>
                         </repeat>
                     </tr>
                 </repeat>
+                <tr>
+                    <th class="plan-release">
+                        No Release
+                        <repeat group="{{ @board }}" value="{{ @feature }}">
+                            <check if="{{ isset(@feature.epics) }}">
+                                <repeat group="{{ @feature.epics }}" value="{{ @epic }}">
+                                    <td>
+                                        <check if="{{ array_key_exists(@epic.id, @storyMap) }}">
+                                            <repeat group="{{ @storyMap[@epic.id] }}" value="{{ @story }}">
+                                                <check if="{{ !in_array(@story.id, @releaseMappedIssues) }}">
+                                                    <include href="releases/view/project-plan-story-card.html" />
+                                                </check>
+                                            </repeat>
+                                        </check>
+                                    </td>
+                                </repeat>
+                            </check>
+                            <td>
+                                <check if="{{ array_key_exists(@feature.id, @storyMap) }}">
+                                    <repeat group="{{ @storyMap[@feature.id] }}" value="{{ @story }}">
+                                        <check if="{{ !in_array(@story.id, @releaseMappedIssues) }}">
+                                            <include href="releases/view/project-plan-story-card.html" />
+                                        </check>
+                                    </repeat>
+                                </check>
+                            </td>
+                        </repeat>
+                    </th>
+                </tr>
             </tbody>
         </table>
     </div>
