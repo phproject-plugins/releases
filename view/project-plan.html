@@ -19,9 +19,10 @@
         .plan-board {
             table-layout: fixed;
             margin-bottom: 1rem;
+            width: auto;
         }
-        .plan-board .epic {
-            width: 240px;
+        .plan-board .plan-epic {
+            min-width: 180px;
         }
         .plan-board a.nolink {
             text-decoration: none;
@@ -35,6 +36,7 @@
             font-weight: normal;
         }
         .plan-release {
+            min-width: 180px;
             height: 160px;
         }
 
@@ -106,13 +108,13 @@
                     <repeat group="{{ @board }}" value="{{ @feature }}">
                         <check if="{{ isset(@feature.epics) }}">
                             <repeat group="{{ @feature.epics }}" value="{{ @epic }}">
-                                <th data-id="{{ @epic.id }}" class="epic">
+                                <th data-id="{{ @epic.id }}" class="plan-epic">
                                     <a href="{{ @BASE }}/issues/{{ @epic.id }}" target="_blank" class="nolink">{{ @epic.name }}</a><br>
                                     <span class="text-muted">{{ @epic.id }}</span>
                                 </th>
                             </repeat>
                         </check>
-                        <th class="epic">
+                        <th class="plan-epic">
                             No Epic
                         </th>
                     </repeat>
