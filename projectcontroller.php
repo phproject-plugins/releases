@@ -25,7 +25,7 @@ class Projectcontroller extends \Controller
         // Load features
         $featureType = $f3->get('site.plugins.releases.type.feature');
         $features = $issue->find([
-            'type_id = ? AND parent_id = ?',
+            'type_id = ? AND parent_id = ? AND deleted_date IS NULL',
             $featureType,
             $issue->id,
         ]);
@@ -40,14 +40,14 @@ class Projectcontroller extends \Controller
         $epicType = $f3->get('site.plugins.releases.type.epic');
         if ($featureIds) {
             $epics = $issue->find([
-                "type_id = ? AND (parent_id = ? OR parent_id in ($featureIdStr))",
+                "type_id = ? AND (parent_id = ? OR parent_id in ($featureIdStr)) AND deleted_date IS NULL",
                 $epicType,
                 $issue->id,
             ]);
         } else {
             // TODO: actually support this
             $epics = $issue->find([
-                "type_id = ? AND (parent_id = ?)",
+                "type_id = ? AND (parent_id = ?) AND deleted_date IS NULL",
                 $epicType,
                 $issue->id,
             ]);
@@ -70,8 +70,10 @@ class Projectcontroller extends \Controller
         if ($featureIds || $epicIds) {
             $storyType = $f3->get('site.plugins.releases.type.story');
             $stories = $issue->find([
-                "type_id = ? AND parent_id IN ($storyParentStr)",
+                "type_id = ? AND parent_id IN ($storyParentStr) AND deleted_date IS NULL",
                 $storyType,
+            ], [
+                'order' => 'closed_date IS NULL'
             ]);
             foreach ($stories as $story) {
                 $storyMap[$story->parent_id][] = $story->cast();

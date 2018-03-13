@@ -3,12 +3,19 @@
 <head>
     <include href="blocks/head.html" />
     <style>
+        body {
+            padding-top: 140px;
+        }
         .plan-topbar {
-            margin-top: -20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
             padding-left: 25px;
             padding-right: 25px;
-            padding-top: 15px;
+            padding-top: 80px;
             padding-bottom: 15px;
+            height: 140px;
             background-color: rgba(127, 127, 127, 0.05);
         }
         .plan-topbar h3 {
@@ -21,18 +28,12 @@
             margin-bottom: 1rem;
             width: auto;
         }
+        .plan-board thead th {
+            text-align: center;
+        }
         .plan-board thead tr:first-child th {
             background-color: rgba(127, 127, 127, 0.2);
             border-color: rgba(127, 127, 127, 0.2);
-        }
-        .plan-board thead .row {
-            margin-left: 0;
-            margin-right: 0;
-        }
-        .plan-board thead .row > *:first-child,
-        .plan-board thead .row > *:last-child {
-            padding-left: 0;
-            padding-right: 0;
         }
         .plan-board .plan-epic {
             min-width: 180px;
@@ -76,7 +77,6 @@
             size: landscape;
         }
         body {
-            padding-top: 0;
             font-size: 9pt;
         }
         a[href]:after {
@@ -113,18 +113,12 @@
                     Release Plan
                 </th>
                 <repeat group="{{ @board }}" value="{{ @feature }}">
-                    <th data-id="{{ @feature.id }}" colspan="{{ @feature.epics ? count(@feature.epics) + 1 : 1 }}" class="plan-feature">
-                        <div class="row">
-                            <div class="text-muted col-xs-4">{{ @feature.id }}</div>
-                            <div class="col-xs-4 text-center">
-                                <a href="{{ @BASE }}/issues/{{ @feature.id }}" target="_blank" class="nolink">{{ @feature.name }}</a>
-                            </div>
-                            <div class="col-xs-4 text-right">
-                                <a href="{{ @BASE }}/issues/new/{{ @site.plugins.releases.type.epic }}/{{ @feature.id }}" target="_blank">
-                                    <span class="fa fa-plus"></span>
-                                </a>
-                            </div>
-                        </div>
+                    <th data-id="{{ @feature.id }}" colspan="{{ @feature.epics ? count(@feature.epics) + 1 : 1 }}" class="plan-feature clearfix">
+                        <div class="pull-left text-muted">{{ @feature.id }}</div>
+                        <a class="pull-right" href="{{ @BASE }}/issues/new/{{ @site.plugins.releases.type.epic }}/{{ @feature.id }}" target="_blank">
+                            <span class="fa fa-plus"></span>
+                        </a>
+                        <a href="{{ @BASE }}/issues/{{ @feature.id }}" target="_blank" class="nolink">{{ @feature.name }}</a>
                     </th>
                 </repeat>
             </tr>
@@ -132,30 +126,22 @@
                 <repeat group="{{ @board }}" value="{{ @feature }}">
                     <check if="{{ isset(@feature.epics) }}">
                         <repeat group="{{ @feature.epics }}" value="{{ @epic }}">
-                            <th data-id="{{ @epic.id }}" class="plan-epic">
-                                <div class="row">
-                                    <div class="text-muted col-xs-4">{{ @feature.id }}</div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="{{ @BASE }}/issues/{{ @epic.id }}" target="_blank" class="nolink">{{ @epic.name }}</a>
-                                    </div>
-                                    <div class="col-xs-4 text-right">
-                                        <a href="{{ @BASE }}/issues/new/{{ @site.plugins.releases.type.story }}/{{ @epic.id }}" target="_blank">
-                                            <span class="fa fa-plus"></span>
-                                        </a>
-                                    </div>
-                                </div>
+                            <th data-id="{{ @epic.id }}" class="plan-epic clearfix">
+                                <div class="pull-left text-muted">{{ @epic.id }}</div>
+                                <a class="pull-right" href="{{ @BASE }}/issues/new/{{ @site.plugins.releases.type.story }}/{{ @epic.id }}" target="_blank">
+                                    <span class="fa fa-plus"></span>
+                                </a>
+                                <a href="{{ @BASE }}/issues/{{ @epic.id }}" target="_blank" class="nolink">{{ @epic.name }}</a>
                             </th>
                         </repeat>
                     </check>
-                    <th class="plan-epic">
-                        <div class="clearfix">
-                            <div class="pull-left">No Epic</div>
-                            <div class="pull-right">
-                                <a href="{{ @BASE }}/issues/new/{{ @site.plugins.releases.type.story }}/{{ @feature.id }}" target="_blank">
-                                    <span class="fa fa-plus"></span>
-                                </a>
-                            </div>
+                    <th class="plan-epic clearfix">
+                        <div class="pull-right">
+                            <a href="{{ @BASE }}/issues/new/{{ @site.plugins.releases.type.story }}/{{ @feature.id }}" target="_blank">
+                                <span class="fa fa-plus"></span>
+                            </a>
                         </div>
+                        No Epic
                     </th>
                 </repeat>
             </tr>
