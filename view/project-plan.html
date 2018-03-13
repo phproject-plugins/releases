@@ -7,10 +7,10 @@
             padding-top: 140px;
         }
         .plan-topbar {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
+            width: 100%;
             padding-left: 25px;
             padding-right: 25px;
             padding-top: 80px;
@@ -223,5 +223,19 @@
     <div class="container-fluid">
         <include href="blocks/footer.html" />
     </div>
+    <script>
+        $(document).ready(function() {
+
+            // Top bar horizontal scrolling
+            $(window).scroll(function(e) {
+                var left = $(this).scrollLeft();
+                $(".plan-topbar").css("left", left + 'px');
+            });
+
+            // Trigger scroll handler on ready (in case user refreshed after scrolling)
+            $(window).scroll();
+
+        });
+    </script>
 </body>
 </html>
