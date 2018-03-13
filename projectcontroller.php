@@ -61,6 +61,7 @@ class Projectcontroller extends \Controller
         }
         $storyParentStr = implode(',', array_merge($featureIds, $epicIds));
 
+        $f3->set('columnCount', count($featureIds) + count($epicIds));
         $f3->set('board', $board);
 
         // Load stories

@@ -45,11 +45,12 @@ class Base extends \Plugin
         $this->_addNav("releases", "Releases", "/^\\/releases/", "browse");
 
         // Render release field and box on issue pages
-        $this->_hook("render.issue_edit.after_fields", array($this, "issueField"));
+        $this->_hook("render.issue_edit.after_fields", array($this, "issueEditField"));
+        $this->_hook("render.issue_create.after_fields", array($this, "issueCreateField"));
         $this->_hook("render.issue_single.before_description", array($this, "issueBox"));
 
         // Handle issue saving
-        $this->_hook("model/issue.before_save", array($this, "issueSave"));
+        $this->_hook("model/issue.after_save", array($this, "issueSave"));
     }
 
     /**
@@ -79,11 +80,25 @@ class Base extends \Plugin
      * Render the release field on the issue edit form
      * @param \Model\Issue $issue
      */
-    public function issueField(\Model\Issue $issue)
+    public function issueEditField(\Model\Issue $issue)
     {
         $f3 = \Base::instance();
         $release = new Model\Release;
         $release->loadByIssueId($issue->id);
+        \Base::instance()->set("release", $release);
+        if ($f3->get("user.rank") >= \Model\User::RANK_MANAGER) {
+            \Base::instance()->set("releases", $release->find());
+            echo \Template::instance()->render("releases/view/issue-field.html");
+        }
+    }
+
+    /**
+     * Render the release field on the issue create form
+     */
+    public function issueCreateField()
+    {
+        $f3 = \Base::instance();
+        $release = new Model\Release;
         \Base::instance()->set("release", $release);
         if ($f3->get("user.rank") >= \Model\User::RANK_MANAGER) {
             \Base::instance()->set("releases", $release->find());
