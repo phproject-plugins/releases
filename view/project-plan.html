@@ -51,7 +51,7 @@
             font-weight: normal;
         }
         .plan-release {
-            min-width: 180px;
+            width: 300px;
             height: 160px;
         }
 
@@ -64,7 +64,7 @@
         .plan-story {
             display: inline-block;
             margin-bottom: 15px;
-            min-width: 160px;
+            width: 160px;
             text-align: center;
         }
         .plan-story.closed {
@@ -110,7 +110,7 @@
         <thead>
             <tr>
                 <th rowspan="2">
-                    Release Plan
+                    Milestone / Release Plan
                 </th>
                 <repeat group="{{ @board }}" value="{{ @feature }}">
                     <th data-id="{{ @feature.id }}" colspan="{{ @feature.epics ? count(@feature.epics) + 1 : 1 }}" class="plan-feature clearfix">
@@ -149,9 +149,9 @@
         <tbody>
             <repeat group="{{ @releases }}" value="{{ @release }}">
                 <tr>
-                    <th class="plan-release">
-                        <a href="{{ @BASE }}/releases/{{ @release.id }}" target="_blank" class="nolink">Release #{{ @release.id }}</a><br>
-                        {{ @release.name | esc }}<br>
+                    <th class="plan-release" id="{{ @release.id }}">
+                        <a href="{{ @BASE }}/releases/{{ @release.id }}" target="_blank" class="nolink">{{ @release.name | esc }} - 
+                         <small>{{ date("F j, Y", strtotime(@release.target_date)) }}</small></a><br>
                         <small>{{ @release.description | esc }}</small>
                     </th>
                     <repeat group="{{ @board }}" value="{{ @feature }}">
