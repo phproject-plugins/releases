@@ -1,5 +1,5 @@
 <div class="panel panel-default plan-story {{ @story.closed_date ? 'closed' : 'open' }}"
-data-toggle="popover" data-trigger="hover" data-placement="bottom" data-html="true" data-container="body" 
+data-toggle="popover" data-trigger="hover" data-placement="auto bottom" data-html="true" data-container="body" 
 title="<span class='text-left'> <b>Size:</b> {{ strlen(@story.size_estimate) > 0 ?  (@story.size_estimate) : 'N/A'}}</span><span style='float:right;'><b>Sprint:</b> {{ strlen(@story.sprint_id) > 0 ?  (@story.sprint_id) : 'N/A'}}</span>" data-content="<b>Description:</b> {{ strlen(@story.description) > 320 ? substr(@story.description, 0, 300) . ' [...]' : @story.description | esc }}">
     <div class="panel-body">
         <a href="{{ @BASE }}/issues/{{ @story.id }}" target="_blank">{{ @story.id }}</a><br>
