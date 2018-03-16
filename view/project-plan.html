@@ -118,7 +118,7 @@
 <body>
     <include href="blocks/navbar.html" />
 
-    <div class="plan-topbar">
+    <div class="plan-topbar container-fluid">
         <div class="row">
             <div class="col-sm-6">
                 <h3>
@@ -128,7 +128,7 @@
                 {{ @issue.owner_name }}
             </div>
             <div class="col-sm-6 text-right">
-                <button class="btn btn-defalt hideButton">Hide Closed</button>
+                <button class="btn btn-defalt hideButton" type="button">Hide Closed</button>
             </div>
         </div>
     </div>
@@ -245,19 +245,16 @@
             </tr>
         </tbody>
     </table>
-
     <div class="container-fluid">
         <include href="blocks/footer.html" />
     </div>
     <script>
         $(document).ready(function() {
-
             // Top bar horizontal scrolling
             $(window).scroll(function(e) {
                 var left = $(this).scrollLeft();
                 $(".plan-topbar").css("left", left + 'px');
             });
-
             // Trigger scroll handler on ready (in case user refreshed after scrolling)
             $(window).scroll();
             // Bootstrap popover trigger
@@ -266,14 +263,13 @@
             // Button to show and hide closed user story
             $("button.hideButton").click(function(){
             $(".closed").toggleClass("hide-closed");
-                var $this = $(this);
-                $this.toggleClass('hide-closed-btn');
-                if($this.hasClass('hide-closed-btn')){
-                    $this.text('Show Closed');         
-                } else {
-                    $this.text('Hide Closed');
-                }
-
+            var $this = $(this);
+            $this.toggleClass('hide-closed-btn');
+            if($this.hasClass('hide-closed-btn')){
+                $this.text('Show Closed');         
+            } else {
+                $this.text('Hide Closed');
+            }
         });
     </script>
 </body>
