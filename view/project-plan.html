@@ -255,21 +255,24 @@
                 var left = $(this).scrollLeft();
                 $(".plan-topbar").css("left", left + 'px');
             });
+            
             // Trigger scroll handler on ready (in case user refreshed after scrolling)
             $(window).scroll();
+            
             // Bootstrap popover trigger
             $('[data-toggle="popover"]').popover();   
-            });
+            
             // Button to show and hide closed user story
-            $("button.hideButton").click(function(){
-            $(".closed").toggleClass("hide-closed");
-            var $this = $(this);
-            $this.toggleClass('hide-closed-btn');
-            if($this.hasClass('hide-closed-btn')){
-                $this.text('Show Closed');         
-            } else {
-                $this.text('Hide Closed');
-            }
+            $("button.hideButton").click(function() {
+                $(".closed").toggleClass("hide-closed");
+                let $this = $(this);
+                $this.toggleClass('hide-closed-btn');
+                if ($this.hasClass('hide-closed-btn')) {
+                    $this.text('Show Closed');         
+                } else {
+                    $this.text('Hide Closed');
+                }
+            });
         });
     </script>
 </body>
