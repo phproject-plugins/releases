@@ -32,7 +32,7 @@ class Controller extends \Controller
         $f3->set("release", $release);
         $rid = new Model\Release_Issue_Detail;
         $issues = $rid->paginate(0, 999, array("release_id = ?", $release->id));
-        $f3->set("issues", $issues);
+        $f3->set("issues", $issues['subset']);
         $this->_render("releases/view/single.html");
     }
 

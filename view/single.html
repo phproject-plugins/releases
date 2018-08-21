@@ -5,7 +5,7 @@
 </head>
 <body>
     <include href="blocks/navbar.html" />
-    <div class="container-fluid">
+    <div class="container">
         <a href="{{ @BASE }}/releases">
             <span class="fa fa-chevron-left"></span>&ensp;Releases
         </a>
@@ -28,8 +28,12 @@
         <check if="{{ @release.target_date }}">
             <p>Target release date: {{ date("F j, Y", strtotime(@release.target_date)) }}</p>
         </check>
+        <check if="{{ @release.description }}">
+            <div class="tex">{{ @release.description | format }}</div>
+            <br>
+        </check>
 
-        <include href="blocks/issue-list.html" />
+        <include href="blocks/dashboard-issue-list.html" />
 
         <include href="blocks/footer.html" />
         <script src="{{ @BASE }}/minify/js/stupidtable.min.js"></script>
