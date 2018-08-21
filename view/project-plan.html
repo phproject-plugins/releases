@@ -34,6 +34,8 @@
         .plan-board thead tr:first-child th {
             background-color: rgba(127, 127, 127, 0.2);
             border-color: rgba(127, 127, 127, 0.2);
+            height: 50px;
+            vertical-align: middle;
         }
         .plan-board .plan-epic {
             min-width: 180px;
@@ -51,10 +53,9 @@
             font-weight: normal;
         }
         .plan-release {
-            min-width: 180px;
+            min-width: 250px;
             height: 160px;
         }
-
         @media (min-width: {{ @columnCount * 360 + 180 }}px) {
             .plan-board td > div {
                 column-count: 2;
@@ -64,12 +65,18 @@
         .plan-story {
             display: inline-block;
             margin-bottom: 15px;
-            min-width: 160px;
+            width: 160px;
             text-align: center;
         }
         .plan-story.closed {
             text-decoration: line-through;
             background-color: rgba(127, 127, 127, 0.35);
+        }
+        .hide-closed {
+            display: none;
+        }
+        .popover{
+            min-width: 160px;
         }
     </style>
     <style media="print">
@@ -88,29 +95,48 @@
         .plan-topbar {
             margin-top: 0;
         }
+        .hideButton{
+            display: none;
+        }
         .plan-board {
             margin-bottom: 0;
         }
         .container-fluid > footer {
             display: none;
         }
+        .plan-board thead tr:first-child th {
+            background-color: rgba(127, 127, 127, 0.2) !important;
+            border-color: rgba(127, 127, 127, 0.2) !important;
+            -webkit-print-color-adjust: exact; 
+        }
+        .plan-board .plan-epic {
+            background-color: rgba(127, 127, 127, 0.05) !important;
+            -webkit-print-color-adjust: exact; 
+        }
     </style>
 </head>
 <body>
     <include href="blocks/navbar.html" />
 
-    <div class="plan-topbar">
-        <h3>
-            <a href="{{ @BASE }}/issues/{{ @issue.id }}" target="_blank" class="nolink">{{ @issue.name | esc }}</a>
-            <small>#{{ @issue.id }}</small>
-        </h3>
-        {{ @issue.owner_name }}
+    <div class="plan-topbar container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>
+                    <a href="{{ @BASE }}/issues/{{ @issue.id }}" target="_blank" class="nolink">{{ @issue.name | esc }}</a>
+                    <small>#{{ @issue.id }}</small>
+                </h3>
+                {{ @issue.owner_name }}
+            </div>
+            <div class="col-sm-6 text-right">
+                <button id="showHide" class="btn btn-default hideButton" type="button" data-donebtn="">Hide Closed</button>
+            </div>
+        </div>
     </div>
     <table class="table table-bordered plan-board">
         <thead>
             <tr>
                 <th rowspan="2">
-                    Release Plan
+                    Milestone / Release Plan
                 </th>
                 <repeat group="{{ @board }}" value="{{ @feature }}">
                     <th data-id="{{ @feature.id }}" colspan="{{ @feature.epics ? count(@feature.epics) + 1 : 1 }}" class="plan-feature clearfix">
@@ -149,9 +175,9 @@
         <tbody>
             <repeat group="{{ @releases }}" value="{{ @release }}">
                 <tr>
-                    <th class="plan-release">
-                        <a href="{{ @BASE }}/releases/{{ @release.id }}" target="_blank" class="nolink">Release #{{ @release.id }}</a><br>
-                        {{ @release.name | esc }}<br>
+                    <th class="plan-release" id="{{ @release.id }}">
+                        <a href="{{ @BASE }}/releases/{{ @release.id }}" target="_blank" class="nolink">{{ @release.name | esc }} - 
+                         <small>{{ date("F j, Y", strtotime(@release.target_date)) }}</small></a><br>
                         <small>{{ @release.description | esc }}</small>
                     </th>
                     <repeat group="{{ @board }}" value="{{ @feature }}">
@@ -219,22 +245,61 @@
             </tr>
         </tbody>
     </table>
-
     <div class="container-fluid">
         <include href="blocks/footer.html" />
     </div>
     <script>
         $(document).ready(function() {
-
             // Top bar horizontal scrolling
             $(window).scroll(function(e) {
                 var left = $(this).scrollLeft();
                 $(".plan-topbar").css("left", left + 'px');
             });
-
+            
             // Trigger scroll handler on ready (in case user refreshed after scrolling)
             $(window).scroll();
+            
+            // Bootstrap popover trigger
+            $('[data-toggle="popover"]').popover();   
+            
+            // Set/Update URI for filtering & toggles closed items
+            function getQueryVariable(variable)
+            {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+                }
+                return(0);
+            }
+            
+            var closedVal = getQueryVariable("hide_closed");
+            $('#showHide').attr('data-donebtn',closedVal);
 
+            if ($('#showHide').attr('data-donebtn')==1) {
+                $(".closed").toggleClass("hide-closed");
+                let $this = $(this);
+                $this.toggleClass('hide-closed-btn');
+                $('#showHide').text('Show Closed');
+            } else {
+                $('#showHide').text('Hide Closed');
+            }
+
+            var path =  '/releases/plan/{{ @issue.id }}';
+            $("#showHide").click(function() {
+                $(".closed").toggleClass("hide-closed");
+                let $this = $(this);
+                if ($this.attr('data-donebtn')==1) {
+                    $this.attr('data-donebtn','0');
+                    $this.text('Hide Closed'); 
+                    history.replaceState({}, 'hide_closed', BASE + path +'?hide_closed=0');
+                } else {
+                    $this.attr('data-donebtn','1');
+                    $this.text('Show Closed');
+                    history.replaceState({}, 'hide_closed', BASE + path +'?hide_closed=1');
+                };
+            });
         });
     </script>
 </body>
