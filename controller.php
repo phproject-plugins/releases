@@ -12,12 +12,14 @@ class Controller extends \Controller
         $closed = $release->find("closed_date IS NOT NULL", array("order" => "target_date DESC, created_date DESC"));
         $f3->set("open", $open);
         $f3->set("closed", $closed);
+        $f3->set("title", "Releases");
         $this->_render("releases/view/index.html");
     }
 
     public function add(\Base $f3)
     {
         $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $f3->set("title", "New Release");
         $this->_render("releases/view/new.html");
     }
 
@@ -30,6 +32,7 @@ class Controller extends \Controller
             $f3->error(404);
         }
         $f3->set("release", $release);
+        $f3->set("title", $release->name . " - Releases");
         $rid = new Model\Release_Issue_Detail;
         $issues = $rid->paginate(0, 999, array("release_id = ?", $release->id));
         $f3->set("issues", $issues['subset']);
@@ -96,6 +99,7 @@ class Controller extends \Controller
             $f3->error(404);
         }
         $f3->set("release", $release);
+        $f3->set("title", $release->name . " - Releases");
         $this->_render("releases/view/edit.html");
     }
 
