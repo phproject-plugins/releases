@@ -2,14 +2,16 @@
 
 namespace Plugin\Releases;
 
+use Model\User;
+
 class Controller extends \Controller
 {
     public function index(\Base $f3)
     {
         $this->_requireLogin();
         $release = new Model\Release_Detail;
-        $open = $release->find("closed_date IS NULL", array("order" => "target_date ASC, created_date ASC"));
-        $closed = $release->find("closed_date IS NOT NULL", array("order" => "target_date DESC, created_date DESC"));
+        $open = $release->find("closed_date IS NULL", ["order" => "target_date ASC, created_date ASC"]);
+        $closed = $release->find("closed_date IS NOT NULL", ["order" => "target_date DESC, created_date DESC"]);
         $f3->set("open", $open);
         $f3->set("closed", $closed);
         $f3->set("title", "Releases");
@@ -18,7 +20,7 @@ class Controller extends \Controller
 
     public function add(\Base $f3)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $f3->set("title", "New Release");
         $this->_render("releases/view/new.html");
     }
@@ -34,7 +36,7 @@ class Controller extends \Controller
         $f3->set("release", $release);
         $f3->set("title", $release->name . " - Releases");
         $rid = new Model\Release_Issue_Detail;
-        $issues = $rid->paginate(0, 999, array("release_id = ?", $release->id));
+        $issues = $rid->paginate(0, 999, ["release_id = ? AND deleted_date IS NULL", $release->id]);
         $f3->set("issues", $issues['subset']);
         $this->_render("releases/view/single.html");
     }
@@ -50,10 +52,10 @@ class Controller extends \Controller
         }
 
         $issue = new Model\Release_Issue_Detail;
-        $issues = $issue->find(array("release_id = ?", $release->id));
+        $issues = $issue->find(["release_id = ? AND deleted_date IS NULL", $release->id]);
 
         // Configure visible fields
-        $fields = array(
+        $fields = [
             "id" => $f3->get("dict.cols.id"),
             "name" => $f3->get("dict.cols.title"),
             "type_name" => $f3->get("dict.cols.type"),
@@ -64,7 +66,7 @@ class Controller extends \Controller
             "sprint_name" => $f3->get("dict.cols.sprint"),
             "created_date" => $f3->get("dict.cols.created"),
             "due_date" => $f3->get("dict.cols.due_date"),
-        );
+        ];
 
         // Notify browser that file is a CSV, send as attachment (force download)
         header("Content-type: text/csv");
@@ -92,7 +94,7 @@ class Controller extends \Controller
 
     public function edit(\Base $f3, array $params)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $release = new Model\Release;
         $release->load($params["id"]);
         if (!$release->id) {
@@ -105,7 +107,7 @@ class Controller extends \Controller
 
     public function close(\Base $f3, array $params)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $release = new Model\Release;
         $release->load($params["id"]);
         $release->closed_date = date("Y-m-d H:i:s");
@@ -115,7 +117,7 @@ class Controller extends \Controller
 
     public function reopen(\Base $f3, array $params)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $release = new Model\Release;
         $release->load($params["id"]);
         $release->closed_date = null;
@@ -125,7 +127,7 @@ class Controller extends \Controller
 
     public function delete(\Base $f3, array $params)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $release = new Model\Release;
         $release->load($params["id"]);
         $release->delete();
@@ -134,7 +136,7 @@ class Controller extends \Controller
 
     public function addPost(\Base $f3)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $release = new Model\Release;
         $release->name = $f3->get("POST.name");
         $release->description = $f3->get("POST.description");
@@ -147,7 +149,7 @@ class Controller extends \Controller
 
     public function editPost(\Base $f3, array $params)
     {
-        $this->_requireLogin(\Model\User::RANK_MANAGER);
+        $this->_requireLogin(User::RANK_MANAGER);
         $release = new Model\Release;
         $release->load($params["id"]);
         $release->name = $f3->get("POST.name");
