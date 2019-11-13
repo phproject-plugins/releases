@@ -2,7 +2,7 @@
 /**
  * @package  Releases
  * @author   Alan Hardman <alan@phpizza.com>
- * @version  0.1.0
+ * @version  0.1.1
  * @requires 1.4.1
  */
 
