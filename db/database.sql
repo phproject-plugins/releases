@@ -6,7 +6,7 @@ CREATE TABLE `release`(
   `target_date` DATE,
   `closed_date` DATETIME,
   PRIMARY KEY (`id`)
-) ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=INNODB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `release_issue`(
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
